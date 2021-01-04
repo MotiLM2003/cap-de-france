@@ -10,6 +10,8 @@ require('./db/mongoose');
 
 var userRouter = require('./routers/userRouter');
 
+var customerRouter = require('./routers/customerRouter');
+
 var app = express();
 var PORT = process.env.PORT || 5000;
 app.use(cors({
@@ -19,6 +21,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use('/users', userRouter);
+app.use('/customers', customerRouter);
 app.listen(PORT, function () {
   console.log("Server is up and listening on port ".concat(PORT));
 });

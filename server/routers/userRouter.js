@@ -12,6 +12,7 @@ const {
 
 router.post('/login', initLogin);
 router.post('/validateToken', validateToken);
+
 router.post('/', addUser);
 router.get('/', auth, getAllUsers);
 router.post('/logout', auth, logOut);

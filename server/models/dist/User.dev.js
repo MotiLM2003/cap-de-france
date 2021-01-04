@@ -42,12 +42,21 @@ var userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  isActive: {
+    type: Boolean,
+    "default": false
+  },
   tokens: [{
     token: {
       type: String,
       required: true
     }
   }]
+});
+userSchema.virtual('customers', {
+  ref: 'Customer',
+  localField: '_id',
+  foreignField: 'owner'
 });
 
 userSchema.methods.toJSON = function () {

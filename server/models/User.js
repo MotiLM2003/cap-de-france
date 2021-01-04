@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   country: { type: String, required: true, trim: true },
   userName: { type: String, required: true, trim: true },
   userPassword: { type: String, required: true, trim: true },
+  isActive: { type: Boolean, default: false },
   tokens: [
     {
       token: {
@@ -18,6 +19,12 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+});
+
+userSchema.virtual('customers', {
+  ref: 'Customer',
+  localField: '_id',
+  foreignField: 'owner',
 });
 
 userSchema.methods.toJSON = function () {
