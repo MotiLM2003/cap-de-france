@@ -15,7 +15,23 @@ const getByOwner = async (req, res) => {
   res.json({ customers, count });
 };
 
+const updateById = async ({ body }, res) => {
+  const { _id, update } = body;
+  const data = await Customer.findByIdAndUpdate(_id, update);
+  res.json(data);
+};
+
+const getCustomerDetails = async (req, res) => {
+  const id = req.params.id;
+  const data = await Customer.findById(id)
+    .populate('owner')
+    .populate('comments');
+  res.json(data);
+};
+
 module.exports = {
   registerCustomer,
   getByOwner,
+  updateById,
+  getCustomerDetails,
 };

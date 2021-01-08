@@ -1,32 +1,53 @@
 const mongoose = require('mongoose');
 
-const customerSchema = new mongoose.Schema({
-  createAt: { type: Date, default: () => new Date() },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  phone: { type: String, required: true },
-  status: { type: Number, default: 0 },
-  email: { type: String, required: true },
-  country: { type: String, required: true },
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
-  realDeposit: { type: Number, default: 0 },
-  campaign: { type: String, default: 0 },
-  userPassword: { type: String, required: true, trim: true },
+const customerSchema = new mongoose.Schema(
+  {
+    createAt: { type: Date, default: () => new Date() },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    phone: { type: String, required: true },
+    status: { type: Number, default: 0 },
+    email: { type: String, required: true },
+    country: { type: String, required: true },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+    realDeposit: { type: Number, default: 0 },
+    campaign: { type: String, default: 0 },
+    userPassword: { type: String, required: true, trim: true },
+  },
+  {
+    toObject: {
+      virtuals: true,
+    },
+    toJSON: {
+      virtuals: true,
+    },
+  }
+);
+
+customerSchema.virtual('comments', {
+  ref: 'Comments',
+  localField: '_id',
+  foreignField: 'owner',
 });
 
 customerSchema.statics.getByOwner = async ({
   filters = { firstName: '' },
   page,
   limit,
+  orderBy,
 }) => {
   filters = buildFilter(filters);
-  const startIndex = (page - 1) * limit;
+  let startIndex = (page - 1) * limit;
   const endIntex = page * limit;
   // need to specify a user;
+  if (startIndex < 0) startIndex = 0;
   const customers = await Customer.find(filters)
+    .sort(orderBy)
+    .populate('comments', (err, item) => {})
     .populate('owner')
     .limit(limit)
     .skip(startIndex);
+
   return customers;
 };
 
@@ -39,7 +60,6 @@ module.exports = Customer;
 
 const buildFilter = (f) => {
   let filter = {};
-
   if (f.status !== '0') {
     filter = { ...filter, status: f.status - 1 };
   }

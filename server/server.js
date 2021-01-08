@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 require('./db/mongoose');
 const userRouter = require('./routers/userRouter');
 const customerRouter = require('./routers/customerRouter');
+const commentRouter = require('./routers/commentsRouter');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/users', userRouter);
 app.use('/customers', customerRouter);
+app.use('/comments/', commentRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is up and listening on port ${PORT}`);

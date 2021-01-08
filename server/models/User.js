@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true, trim: true },
-  lastName: { type: String, required: true, trim: true },
+  firstName: { type: String, default: '', trim: true },
+  lastName: { type: String, default: '', trim: true },
   email: { type: String, required: true, trim: true },
   phone: { type: String, required: true, trim: true },
   country: { type: String, required: true, trim: true },
@@ -66,7 +66,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.pre('save', async function (next) {
   const user = this;
-
   if (user.isModified('userPassword')) {
     user.userPassword = await bcrypt.hash(user.userPassword, 8);
   }

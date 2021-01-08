@@ -8,10 +8,14 @@ var router = new express.Router();
 
 var _require = require('../controllers/customerControllers'),
     registerCustomer = _require.registerCustomer,
-    getByOwner = _require.getByOwner;
+    getByOwner = _require.getByOwner,
+    updateById = _require.updateById,
+    getCustomerDetails = _require.getCustomerDetails;
 
 router.post('/register', auth, registerCustomer);
-router.post('/get-by-owner', auth, getByOwner); // create fake customers (temporary)
+router.post('/get-by-owner', auth, getByOwner);
+router.patch('/update', auth, updateById);
+router.get('/details/:id', auth, getCustomerDetails); // create fake customers (temporary)
 
 var faker = require('faker');
 

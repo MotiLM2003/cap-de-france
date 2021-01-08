@@ -4,10 +4,13 @@ const router = new express.Router();
 const {
   registerCustomer,
   getByOwner,
+  updateById,
+  getCustomerDetails,
 } = require('../controllers/customerControllers');
 router.post('/register', auth, registerCustomer);
 router.post('/get-by-owner', auth, getByOwner);
-
+router.patch('/update', auth, updateById);
+router.get('/details/:id', auth, getCustomerDetails);
 // create fake customers (temporary)
 
 const faker = require('faker');
